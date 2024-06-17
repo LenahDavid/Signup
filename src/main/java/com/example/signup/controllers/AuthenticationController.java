@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@RestController
 public class AuthenticationController {
     private  final AuthenticationService authenticationService;
 
@@ -21,8 +23,12 @@ public class AuthenticationController {
 
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<User> signup(@RequestBody SignupRequest signupRequest){
-        User user = authenticationService.signup(signupRequest);
-        return ResponseEntity.ok(user);
+        try {
+            User user = authenticationService.signup(signupRequest);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     @Operation(
             description = "Signing in a User",
